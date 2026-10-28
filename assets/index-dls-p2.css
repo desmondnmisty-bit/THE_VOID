@@ -1,0 +1,852 @@
+/* Responsive replacement for index-dls-p2.css.
+ * Keep the existing HTML IDs/classes and game logic.
+ * Recommended HTML viewport:
+ * <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+ */
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --ui-space: clamp(12px, 2.5vw, 30px);
+  --viewport-height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  :root { --viewport-height: 100dvh; }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  color: #e8e2d0;
+  font-family: Georgia, "Times New Roman", serif;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: var(--viewport-height);
+}
+
+#app canvas {
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  /* Unsupported safe alignment falls back to a scrollable top alignment. */
+  justify-content: flex-start;
+  justify-content: safe center;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: calc(var(--ui-space) + var(--safe-top))
+    calc(var(--ui-space) + var(--safe-right))
+    calc(var(--ui-space) + var(--safe-bottom))
+    calc(var(--ui-space) + var(--safe-left));
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: radial-gradient(#2a00148c, #000000eb);
+  text-align: center;
+}
+
+.screen > * {
+  flex-shrink: 0;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.screen.show {
+  display: flex;
+}
+
+#menu,
+#loading {
+  background: radial-gradient(#3a001c40, #000000bf);
+}
+
+h1,
+h2,
+h3,
+h4,
+.brand,
+.best {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  margin: 4px 0;
+  color: #f4f4f8;
+  font-size: clamp(36px, 9vw, 96px);
+  line-height: 1.12;
+  letter-spacing: clamp(4px, 2vw, 22px);
+  text-shadow: 0 0 30px #ff0080, 0 0 80px #ff0080;
+}
+
+h3 {
+  margin: 0 0 clamp(16px, 3vw, 30px);
+  color: #c0c0c8;
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: clamp(2px, 0.6vw, 6px);
+}
+
+h2 {
+  margin: 0 0 20px;
+  font-size: clamp(26px, 5.5vw, 42px);
+  line-height: 1.2;
+  letter-spacing: clamp(2px, 0.6vw, 4px);
+  text-shadow: 0 0 20px #ff0080;
+}
+
+.red {
+  color: #ff5a5a;
+  text-shadow: 0 0 20px red;
+}
+
+.brand {
+  color: #c0c0c8;
+  font-size: clamp(11px, 1.8vw, 14px);
+  line-height: 1.6;
+  letter-spacing: clamp(2px, 1vw, 10px);
+}
+
+.menu-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 320px);
+  min-width: 0;
+}
+
+button {
+  min-width: 0;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 12px clamp(16px, 3vw, 28px);
+  border: 1px solid #8a8a96;
+  background: linear-gradient(#18181c, #0a0a0c);
+  color: #f4f4f8;
+  font: inherit;
+  font-size: clamp(16px, 2.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: clamp(1px, 0.4vw, 3px);
+  text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+button:focus-visible,
+.hero:focus-visible,
+.opt:focus-visible {
+  outline: 3px solid #ff80bf;
+  outline-offset: 4px;
+}
+
+button:active {
+  background: linear-gradient(#2a0014, #120008);
+}
+
+.panel {
+  gap: 6px;
+}
+
+.panel ul {
+  width: min(100%, 760px);
+  margin: 0 0 20px;
+  padding-inline-start: clamp(20px, 4vw, 32px);
+  font-size: clamp(16px, 2.5vw, 19px);
+  line-height: 1.6;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.panel li + li {
+  margin-top: 6px;
+}
+
+.bar {
+  width: min(360px, 100%);
+  height: 6px;
+  margin: 20px 0;
+  overflow: hidden;
+  background: #222;
+}
+
+.bar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #ff0080;
+  box-shadow: 0 0 10px #ff0080;
+}
+
+.best {
+  margin-top: 24px;
+  color: #a0a0aa;
+  line-height: 1.5;
+}
+
+.heroes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 40px);
+  width: min(100%, 680px);
+  margin-bottom: 30px;
+}
+
+.hero {
+  flex: 0 1 300px;
+  width: min(300px, 100%);
+  min-width: 0;
+  padding: clamp(12px, 2vw, 16px);
+  border: 1px solid #55555f;
+  background: #0c0c0ecc;
+  text-align: center;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.bars {
+  position: absolute;
+  bottom: calc(var(--ui-space) + var(--safe-bottom));
+  left: calc(var(--ui-space) + var(--safe-left));
+  width: min(340px, calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space)));
+}
+
+.bars > div {
+  position: relative;
+  height: 14px;
+  margin-top: 6px;
+  border: 1px solid #fff3;
+  background: #0009;
+}
+
+.bars .hp {
+  height: 22px;
+}
+
+.bars i {
+  display: block;
+  height: 100%;
+  transition: width 0.12s;
+}
+
+#hpFill {
+  background: linear-gradient(90deg, #8a1020, #e8344a);
+  box-shadow: 0 0 12px #e8344a;
+}
+
+#stFill {
+  background: linear-gradient(90deg, #1d7a4a, #5cf0a0);
+}
+
+#chFill {
+  background: linear-gradient(90deg, #3a7aff, #bfe8ff);
+  box-shadow: 0 0 10px #8fd8ff;
+}
+
+.bars .ch {
+  height: 6px;
+  border: none;
+}
+
+#hpTxt {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+#stage {
+  position: absolute;
+  top: calc(22px + var(--safe-top));
+  left: calc(var(--ui-space) + var(--safe-left));
+  max-width: calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space));
+  color: #e4e4ec;
+  font-size: clamp(14px, 2.3vw, 18px);
+  line-height: 1.3;
+  letter-spacing: clamp(1px, 0.4vw, 3px);
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 8px #000;
+}
+
+#buffs {
+  position: absolute;
+  top: calc(52px + var(--safe-top));
+  left: calc(var(--ui-space) + var(--safe-left));
+  max-width: min(420px, calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space)));
+  color: #c0c0c8;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+#prompt {
+  position: absolute;
+  right: calc(var(--ui-space) + var(--safe-right));
+  bottom: calc(120px + var(--safe-bottom));
+  left: calc(var(--ui-space) + var(--safe-left));
+  font-size: clamp(16px, 2.8vw, 22px);
+  line-height: 1.4;
+  letter-spacing: clamp(1px, 0.3vw, 2px);
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 10px #000;
+}
+
+#muteIcon {
+  position: absolute;
+  right: calc(24px + var(--safe-right));
+  bottom: calc(20px + var(--safe-bottom));
+  display: none;
+  font-size: 26px;
+  line-height: 1;
+}
+
+#bossbar {
+  position: fixed;
+  top: calc(26px + var(--safe-top));
+  left: calc(50% + (var(--safe-left) - var(--safe-right)) / 2);
+  z-index: 6;
+  width: min(640px, calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space)));
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+#bossName {
+  margin-bottom: 6px;
+  font-size: clamp(16px, 2.7vw, 22px);
+  line-height: 1.3;
+  letter-spacing: clamp(2px, 0.6vw, 5px);
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 12px red;
+}
+
+.bb {
+  position: relative;
+  height: 16px;
+  border: 1px solid #fff4;
+  background: #000a;
+}
+
+.bb i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #6a0a1a, #ff3a3a);
+  box-shadow: 0 0 14px #f33;
+  transition: width 0.15s;
+}
+
+.bb b {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: #fff;
+}
+
+#banner {
+  position: fixed;
+  top: 30%;
+  right: calc(var(--ui-space) + var(--safe-right));
+  left: calc(var(--ui-space) + var(--safe-left));
+  z-index: 8;
+  opacity: 0;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 0.8s;
+}
+
+#banner span {
+  display: block;
+  font-size: clamp(28px, 7vw, 84px);
+  line-height: 1.2;
+  letter-spacing: clamp(3px, 2vw, 24px);
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 40px var(--bc, #ff0080), 0 0 90px var(--bc, #ff0080);
+}
+
+#banner small {
+  display: block;
+  margin-top: 8px;
+  color: #ccc;
+  font-size: clamp(12px, 2.3vw, 18px);
+  line-height: 1.5;
+  letter-spacing: clamp(2px, 0.8vw, 8px);
+  overflow-wrap: anywhere;
+}
+
+#banner.on {
+  opacity: 1;
+}
+
+#dmgLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.dn {
+  position: absolute;
+  font-family: Arial, sans-serif;
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow: 0 0 4px #000, 0 0 8px #000;
+  transform: translate(-50%, -50%);
+}
+
+.opts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(12px, 2.5vw, 24px);
+  width: min(100%, 900px);
+}
+
+.opt {
+  flex: 0 1 260px;
+  width: min(260px, 100%);
+  min-width: 0;
+  padding: clamp(14px, 2.5vw, 20px);
+  border: 1px solid #55555f;
+  background: #0c0c0eee;
+  text-align: center;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.opt .ic {
+  font-size: clamp(32px, 5vw, 44px);
+}
+
+.opt h4 {
+  margin: 8px 0;
+  font-size: clamp(17px, 2.5vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 2px;
+}
+
+.opt img {
+  width: min(120px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#fade {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0;
+  background: #000;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+#cut {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+
+.lb {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 12vh;
+  background: #000;
+  transition: transform 0.6s;
+}
+
+.lb.top {
+  top: 0;
+}
+
+.lb.bot {
+  bottom: 0;
+}
+
+#dlg {
+  position: absolute;
+  bottom: max(14vh, calc(12px + var(--safe-bottom)));
+  left: calc(50% + (var(--safe-left) - var(--safe-right)) / 2);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(10px, 2vw, 20px);
+  width: min(1000px, calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space)));
+  max-height: calc(var(--viewport-height) - 28vh - var(--safe-top) - var(--safe-bottom));
+  padding: clamp(12px, 2vw, 18px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #55555f;
+  background: linear-gradient(#0e0e10ee, #050506ee);
+  box-shadow: 0 0 40px #000;
+  text-align: start;
+  transform: translateX(-50%);
+}
+
+#dlgImg {
+  flex: none;
+  width: clamp(56px, 13vw, 130px);
+  height: auto;
+  aspect-ratio: 1;
+  border: 2px solid #ff0080;
+  object-fit: cover;
+}
+
+.dlgBody {
+  flex: 1;
+  min-width: 0;
+}
+
+#dlgName {
+  margin-bottom: 8px;
+  font-size: clamp(16px, 2.5vw, 20px);
+  line-height: 1.3;
+  font-variant: small-caps;
+  letter-spacing: clamp(1px, 0.5vw, 4px);
+  overflow-wrap: anywhere;
+}
+
+#dlgText {
+  min-height: 64px;
+  font-size: clamp(16px, 2.6vw, 21px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+#dlgHint {
+  margin-top: 8px;
+  color: #8a8a96;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+#dlgChoices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+#dlgChoices button {
+  width: 100%;
+  font-size: clamp(16px, 2.3vw, 18px);
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: none;
+}
+
+/* Hover effects only where real hover is available (no sticky touch hover). */
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    background: linear-gradient(#2a0014, #120008);
+    transform: translateX(4px);
+    box-shadow: 0 0 18px #ff0080;
+  }
+
+  .hero:hover {
+    border-color: #ff0080;
+    transform: translateY(-8px);
+    box-shadow: 0 0 30px #ff0080;
+  }
+
+  .opt:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 26px #ff0080;
+  }
+}
+
+/* Separate the centered boss bar from stage/buff text on narrower screens. */
+@media (max-width: 1100px) {
+  #bossbar {
+    top: calc(126px + var(--safe-top));
+  }
+
+  #buffs {
+    max-height: 63px;
+    overflow-y: auto;
+    pointer-events: auto;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 600px) {
+  .screen {
+    padding-top: calc(20px + var(--safe-top));
+    padding-bottom: calc(20px + var(--safe-bottom));
+  }
+
+  .heroes {
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .hero {
+    flex-basis: 260px;
+  }
+
+  .hero img {
+    max-height: 220px;
+  }
+
+  .opts {
+    gap: 12px;
+  }
+
+  .opt {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .opt img {
+    width: 88px;
+  }
+
+  .bars {
+    /* Leave space for the mute indicator in the lower-right corner. */
+    width: min(280px, calc(100% - var(--safe-left) - var(--safe-right) - 2 * var(--ui-space) - 52px));
+  }
+
+  #stage {
+    top: calc(14px + var(--safe-top));
+  }
+
+  #buffs {
+    top: calc(42px + var(--safe-top));
+    max-height: 58.5px;
+    font-size: 13px;
+  }
+
+  #bossbar {
+    top: calc(114px + var(--safe-top));
+  }
+
+  #bossName {
+    margin-bottom: 4px;
+  }
+
+  .bb {
+    height: 13px;
+  }
+
+  #prompt {
+    bottom: calc(100px + var(--safe-bottom));
+  }
+
+  #muteIcon {
+    right: calc(var(--ui-space) + var(--safe-right));
+    bottom: calc(var(--ui-space) + var(--safe-bottom));
+  }
+
+  #dlg {
+    bottom: max(10vh, calc(12px + var(--safe-bottom)));
+    max-height: calc(var(--viewport-height) - 20vh - var(--safe-top) - var(--safe-bottom));
+  }
+
+  #dlgText {
+    min-height: 48px;
+  }
+
+  .lb {
+    height: 8vh;
+  }
+}
+
+/* Very narrow phones: keep dialogue text out of a cramped side column. */
+@media (max-width: 360px) {
+  #dlg {
+    flex-direction: column;
+  }
+
+  #dlgImg {
+    width: 56px;
+  }
+
+  .dlgBody {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* Short windows, browser zoom, and phones held in landscape. */
+@media (max-height: 600px) {
+  .screen {
+    justify-content: flex-start;
+  }
+
+  h1 {
+    font-size: clamp(32px, 12vh, 64px);
+  }
+
+  h3 {
+    margin-bottom: 16px;
+  }
+
+  .best {
+    margin-top: 16px;
+  }
+
+  .hero img {
+    max-height: 160px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --ui-space: 12px;
+  }
+
+  #stage,
+  #buffs {
+    max-width: calc(48% - var(--safe-left) - var(--ui-space));
+  }
+
+  #stage {
+    top: calc(12px + var(--safe-top));
+  }
+
+  #buffs {
+    top: calc(38px + var(--safe-top));
+    max-height: 39px;
+    overflow-y: auto;
+    font-size: 13px;
+    pointer-events: auto;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+
+  #bossbar {
+    top: calc(12px + var(--safe-top));
+    right: calc(var(--ui-space) + var(--safe-right));
+    left: auto;
+    width: min(420px, calc(48% - var(--safe-right) - var(--ui-space)));
+    transform: none;
+  }
+
+  #bossName {
+    font-size: 16px;
+  }
+
+  .bars {
+    width: min(260px, calc(42% - var(--safe-left) - var(--ui-space)));
+  }
+
+  #prompt {
+    bottom: calc(92px + var(--safe-bottom));
+    font-size: 16px;
+  }
+
+  #banner {
+    top: 27%;
+  }
+
+  #banner span {
+    font-size: clamp(26px, 10vh, 44px);
+  }
+
+  #banner small {
+    font-size: 12px;
+  }
+
+  .lb {
+    height: 6vh;
+  }
+
+  #dlg {
+    bottom: max(8vh, calc(8px + var(--safe-bottom)));
+    max-height: calc(var(--viewport-height) - 16vh - var(--safe-top) - var(--safe-bottom));
+    padding: 12px;
+  }
+
+  #dlgImg {
+    width: 64px;
+  }
+
+  #dlgText {
+    min-height: 0;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  .hero,
+  .opt,
+  .bars i,
+  .bb i,
+  #banner,
+  #fade,
+  .lb {
+    transition: none;
+  }
+
+  button:hover,
+  .hero:hover,
+  .opt:hover {
+    transform: none;
+  }
+}
