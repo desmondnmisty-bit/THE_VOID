@@ -1,6 +1,6 @@
 // Dark Logic Studios — The Void: phone / tablet touch controls.
 // Left thumb: floating move stick. ATK: tap = attack nearest enemy, drag = aim,
-// hold = charge (Archer) or chain combo (Orc). DODGE, USE, pause, skip-cutscene.
+// hold = charge (Archer or Orc Cross Rend). RUSH (Orc only), DODGE, USE, pause, skip-cutscene.
 (() => {
   const $ = (id) => document.getElementById(id);
   const coarse = matchMedia('(pointer: coarse)').matches;
@@ -20,6 +20,7 @@
     '<div id="tcStick"><i></i></div>' +
     '<div id="tcUse" class="tc-btn" role="button" aria-label="Use">USE</div>' +
     '<div id="tcDodge" class="tc-btn" role="button" aria-label="Dodge">DODGE</div>' +
+    '<div id="tcRush" class="tc-btn" role="button" aria-label="Blood Rush">RUSH</div>' +
     '<div id="tcAtk" class="tc-btn fresh" role="button" aria-label="Shoot"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="12"/><circle cx="20" cy="20" r="3" class="dot"/><path d="M20 2v10M20 28v10M2 20h10M28 20h10"/></svg><span>SHOOT</span><b id="tcAim"></b></div>' +
     '<div id="tcAuto" class="tc-btn" role="button" aria-label="Auto-fire">AUTO</div>' +
     '<div id="tcCoach"><div class="cL"><b>&#8592; &#8595; &#8594;</b>Left thumb: move</div><div class="cR"><b>&#8600;</b>Tap SHOOT to fire - drag to aim<small>AUTO (on) fires for you</small></div><div class="cD">DODGE: roll<b>&#8595;</b></div><em>Tap anywhere to start</em></div>' +
@@ -176,6 +177,7 @@
   // ---- Buttons ----
   const tap = (el, fn) => el.addEventListener('pointerdown', (e) => { e.preventDefault(); fn(); });
   tap($('tcDodge'), () => { const i = I(); if (i) i.ze(); });
+  tap($('tcRush'), () => { const i = I(); if (i && i.rush) i.rush(); });
   tap($('tcUse'), () => { const i = I(); if (i) i.wt(); });
   tap($('tcPause'), () => { release(); key('KeyP'); });
   tap(skip, () => key('Escape'));
@@ -227,7 +229,7 @@
     if (!i.R.ta) i.R.ta = { x: 0, z: -1 };
     if (atk) {
       if (!atk.aimed) autoAim();
-      if (v.hero === 'orc') i.Me(); // holding chains the 3-hit combo
+      // v9.11: holding with Orc now charges Cross Rend (handled in-game), no combo spam
     } else if (i.R.mv) {
       i.R.ta = { x: i.R.mv.x, z: i.R.mv.z }; // face where you run
     }
@@ -240,6 +242,7 @@
       }
     }
     const pr = $('prompt');
+    body.classList.toggle('tc-orc', v.hero === 'orc');
     $('tcUse').classList.toggle('ready', !!(pr && pr.textContent));
   }
   requestAnimationFrame(frame);

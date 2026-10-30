@@ -1,11 +1,11 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>The Void — Phase 1 | Dark Logic Studios</title>  <script type="module" crossorigin src="./assets/index-dls-p2.js?v=9108"></script>
+<title>The Void — Phase 1 | Dark Logic Studios</title>  <script type="module" crossorigin src="./assets/index-dls-p2.js?v=9110"></script>
   <link rel="icon" href="data:,">
-<link rel="stylesheet" crossorigin href="./assets/index-dls-p2.css?v=9108">
-  <link rel="stylesheet" href="./assets/dls-p2.css?v=9108">
-  <script type="module" src="./assets/touch-p2.js?v=9108"></script>
-  <script src="./assets/art-p3.js?v=9108"></script>
-  <script src="./assets/coldopen-p3.js?v=9108"></script>
+<link rel="stylesheet" crossorigin href="./assets/index-dls-p2.css?v=9110">
+  <link rel="stylesheet" href="./assets/dls-p2.css?v=9110">
+  <script type="module" src="./assets/touch-p2.js?v=9110"></script>
+  <script src="./assets/art-p3.js?v=9110"></script>
+  <script src="./assets/coldopen-p3.js?v=9110"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -15,7 +15,7 @@
   <div class="menu-btns"><button data-act="play">Play</button><button data-act="howto">How to Play</button><button data-act="mute" id="muteBtn">Sound: On</button><button data-act="quit">Quit</button></div>
   <p class="best" id="bestTxt"></p></div>
 <div id="howto" class="screen panel"><h2>Survive the Void.</h2><ul>
-  <li><b>Move</b> WASD · <b>Aim</b> mouse</li><li class="tc-only"><b>Phone</b> Left thumb anywhere moves. <b>SHOOT</b> (big pink button, bottom-right): tap to hit the nearest enemy, drag to aim, hold to charge (Archer) or chain the combo (Orc). <b>DODGE</b> and <b>USE</b> sit beside it. AUTO (above SHOOT) fires for you. Pause is top-right.</li><li><b>Attack</b> left click. Archer: tap to shoot, hold until the bow glows for a charged, piercing shot. Orc: click for a 3-hit dagger combo; the third hit is a spinning cleave.</li>
+  <li><b>Move</b> WASD · <b>Aim</b> mouse</li><li class="tc-only"><b>Phone</b> Left thumb anywhere moves. <b>SHOOT</b> (big pink button, bottom-right): tap to hit the nearest enemy, drag to aim, hold to charge (Archer) or charge Cross Rend (Orc). <b>DODGE</b> and <b>USE</b> sit beside it; Orc also gets <b>RUSH</b> for Blood Rush. AUTO (above SHOOT) fires for you. Pause is top-right.</li><li><b>Attack</b> left click. Archer: tap to shoot, hold until the bow glows for a charged, piercing shot. Orc: click for a 3-hit dagger combo; the third hit is a spinning cleave. Hold attack to charge <b>Cross Rend</b>, an X-shaped cleave that hits harder the longer you charge and staggers enemies. Press <b>Q</b> (phone: <b>RUSH</b>) for <b>Blood Rush</b>: 6s of faster movement and attacks that heal you (18s cooldown).</li>
   <li><b>Dodge</b> Space (costs stamina, brief invulnerability)</li><li><b>Interact</b> E (crates, totems, portals) · <b>Mute</b> M · <b>Pause</b> Esc or P</li>
   <li>Clear <b>Frostreach</b>, then <b>Inferno</b>. Each realm: two arenas, a crate (pick 1 of 2 essences), a God-Merge shop, then a random realm boss.</li>
   <li>Bosses shift phase at 60% and 25% HP. Beat both realm bosses to face the <b>Void Draw</b>: the two fused together. Fall, and you rise again.</li>
@@ -26,7 +26,7 @@
   </div><button data-act="back">Back</button></div>
 <div id="hud" class="hidden">
   <div class="bars"><div class="hp"><i id="hpFill"></i><span id="hpTxt"></span></div><div class="st"><i id="stFill"></i></div><div class="ch"><i id="chFill"></i></div></div>
-  <div id="stage"></div><div id="buffs"></div><div id="prompt"></div><div id="muteIcon">🔇</div>
+  <div id="stage"></div><div id="buffs"></div><div id="vgRush" style="display:none"></div><div id="prompt"></div><div id="muteIcon">🔇</div>
 </div>
 <div id="bossbar" class="hidden"><div id="bossName"></div><div class="bb"><i id="bossFill"></i><b style="left:60%"></b><b style="left:25%"></b></div></div>
 <div id="banner"><small id="bannerSub"></small><span id="bannerTxt"></span></div>
