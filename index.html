@@ -1,12 +1,30 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>The Void — Phase 1 | Dark Logic Studios</title>  <script type="module" crossorigin src="./assets/index-dls-p2.js?v=9116"></script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>The Void by Dark Logic Studios</title><meta name="void-build" content="v9.12.0">
+<meta name="description" content="A dark-fantasy action game from Dark Logic Studios. Pry open the reliquaries, free the trapped gods and break the realm bosses of Frostreach and Inferno, then face the Void Draw. Playable in your browser on desktop or phone.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dark Logic Studios">
+<meta property="og:title" content="The Void by Dark Logic Studios">
+<meta property="og:description" content="A dark-fantasy action game from Dark Logic Studios. Pry open the reliquaries, free the trapped gods and break the realm bosses of Frostreach and Inferno, then face the Void Draw. Playable in your browser on desktop or phone.">
+<meta property="og:url" content="https://desmondnmisty-bit.github.io/THE_VOID/">
+<meta property="og:image" content="https://desmondnmisty-bit.github.io/THE_VOID/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Void by Dark Logic Studios">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Void by Dark Logic Studios">
+<meta name="twitter:description" content="A dark-fantasy action game from Dark Logic Studios. Pry open the reliquaries, free the trapped gods and break the realm bosses of Frostreach and Inferno, then face the Void Draw. Playable in your browser on desktop or phone.">
+<meta name="twitter:image" content="https://desmondnmisty-bit.github.io/THE_VOID/og.jpg">
+  <script type="module" crossorigin src="./assets/index-dls-p2.js?v=9120"></script>
   <link rel="icon" href="data:,">
-<link rel="stylesheet" crossorigin href="./assets/index-dls-p2.css?v=9116">
-  <link rel="stylesheet" href="./assets/dls-p2.css?v=9116">
-  <script type="module" src="./assets/touch-p2.js?v=9116"></script>
-  <script src="./assets/tripo-p4.js?v=9116"></script>
-  <script src="./assets/art-p3.js?v=9116"></script>
-  <script src="./assets/coldopen-p3.js?v=9116"></script>
+<link rel="stylesheet" crossorigin href="./assets/index-dls-p2.css?v=9120">
+  <link rel="stylesheet" href="./assets/dls-p2.css?v=9120">
+  <link rel="stylesheet" href="./assets/void912-p5.css?v=9120">
+<link rel="stylesheet" href="./assets/touch-p5.css?v=9120">
+  <script type="module" src="./assets/void912-p5.js?v=9120"></script>
+  <script type="module" src="./assets/void912-p6.js?v=9120"></script>
+<script type="module" src="./assets/touch-p5.js?v=9120"></script>
+  <script src="./assets/art-p3.js?v=9120"></script>
+  <script src="./assets/coldopen-p3.js?v=9120"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -16,14 +34,16 @@
   <div class="menu-btns"><button data-act="play">Play</button><button data-act="inferno">Play Inferno</button><button data-act="howto">How to Play</button><button data-act="mute" id="muteBtn">Sound: On</button><button data-act="quit">Quit</button></div>
   <p class="best" id="bestTxt"></p></div>
 <div id="howto" class="screen panel"><h2>Survive the Void.</h2><ul>
-  <li><b>Move</b> WASD · <b>Aim</b> mouse</li><li class="tc-only"><b>Phone</b> Left thumb anywhere moves. <b>SHOOT</b> (big pink button, bottom-right): tap to hit the nearest enemy, drag to aim, hold to charge (Archer) or charge Cross Rend (Orc). <b>DODGE</b> and <b>USE</b> sit beside it; Orc also gets <b>RUSH</b> for Blood Rush. AUTO (above SHOOT) fires for you. Pause is top-right.</li><li><b>Attack</b> left click. Archer: tap to shoot, hold until the bow glows for a charged, piercing shot. Orc: click for a 3-hit dagger combo; the third hit is a spinning cleave. Hold attack to charge <b>Cross Rend</b>, an X-shaped cleave that hits harder the longer you charge and staggers enemies. Press <b>Q</b> (phone: <b>RUSH</b>) for <b>Blood Rush</b>: 6s of faster movement and attacks that heal you (18s cooldown).</li>
-  <li><b>Dodge</b> Space (costs stamina, brief invulnerability)</li><li><b>Interact</b> E (crates, totems, portals) · <b>Mute</b> M · <b>Pause</b> Esc or P</li>
+  <li><b>Move</b> WASD · <b>Aim</b> mouse</li><li class="tc-only"><b>Phone</b> Left thumb: move stick. Right side: drag to look and aim, pinch to zoom. <b>ATK</b> (big pink button): tap to hit the nearest enemy, drag to aim. <b>HOLD</b>: hold to charge (Archer bow, Orc Cross Rend, Druid ice hammer), release to strike. <b>MAGIC</b> (Druid frost bolt; Orc Blood Rush), <b>DASH</b>, <b>E/Y</b> to interact, <b>SWAP</b> for a freed god's power. AUTO fires for you. Pause is top-right. Works upright or sideways.</li><li><b>Attack</b> left click. Archer: tap to shoot, hold until the bow glows for a charged, piercing shot. Orc: click for a 3-hit dagger combo; the third hit is a spinning cleave. Hold attack to charge <b>Cross Rend</b>, an X-shaped cleave that hits harder the longer you charge and staggers enemies. Press <b>Q</b> (phone: <b>RUSH</b>) for <b>Blood Rush</b>: 6s of faster movement and attacks that heal you (18s cooldown).</li>
+  <li><b>Dodge</b> Space (costs stamina, brief invulnerability)</li><li><b>The Druid</b> (unlocked by clearing Frostreach then Inferno in one run): hold attack to charge the ice hammer slam (chills; his runes glow as power builds), <b>Q</b> casts a frost magic bolt, Space dashes. · <b>Camera</b> close-up over the shoulder: right-drag to orbit, hold right button + mouse wheel to zoom. Pause menu: <b>Camera</b> (Close-up / Classic) and <b>Auto-follow</b> (On / Off).</li><li><b>Interact</b> E (crates, totems, portals) · <b>Mute</b> M · <b>Pause</b> Esc or P</li>
+  <li><b>Void Market</b> Tab, gamepad D-pad Down, or the <b>Shop · Tab</b> button (top-right). Spend Void Shards from kills, crates and bosses. · <b>God power</b> F (gamepad LB, phone SWAP) once a freed god grants one; G switches.</li>
   <li><b>Play Inferno</b> on the title menu skips Frostreach and drops you straight into Inferno (for testing).</li><li>Clear <b>Frostreach</b>, then <b>Inferno</b>. Each realm: two arenas, a crate (pick 1 of 2 essences), a God-Merge shop, then a random realm boss.</li>
   <li>Bosses shift phase at 60% and 25% HP. Beat both realm bosses to face the <b>Void Draw</b>: the two fused together. Fall, and you rise again.</li>
   <li>Glowing ground markings are incoming attacks. Move out, or dodge through.</li></ul><button data-act="back">Back</button></div>
 <div id="heroSelect" class="screen"><h2>Choose your hero</h2><div class="heroes">
   <div class="hero" data-hero="archer"><img src="./portraits/archer.jpg"><h3>Lyriel</h3><small class="heroRole">Elf Archer</small><p>Energy bow. Tap to shoot, hold to charge a piercing shot. Fragile, deadly at range.</p></div>
   <div class="hero" data-hero="orc"><img src="./portraits/orc.jpg"><h3>Varga</h3><small class="heroRole">Orc Brawler</small><p>Dual daggers. Fast 3-hit combo ending in a spinning cleave. Tough, deadly up close.</p></div>
+<div class="hero locked" data-hero="druid" aria-disabled="true"><div class="druidRune" aria-hidden="true">ᚦ</div><h3>The Druid</h3><small class="heroRole">Ice Hammer Druid</small><p>Huge ice hammer: hold to charge a slam that chills. Q casts frost magic. His runes glow as power builds.</p><small class="heroLock">Beat Frostreach then Inferno first to unlock The Druid.</small></div>
   </div><button data-act="back">Back</button></div>
 <div id="hud" class="hidden">
   <div class="bars"><div class="hp"><i id="hpFill"></i><span id="hpTxt"></span></div><div class="st"><i id="stFill"></i></div><div class="ch"><i id="chFill"></i></div></div>
