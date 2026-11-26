@@ -18,7 +18,7 @@ window.TVart={
   if(e==='inferno'||e==='frost'){const f=tex(e==='inferno'?'floor_lava.jpg':'floor_ice.jpg',5);
    floorMat.map=f;if(e==='inferno'){floorMat.emissiveMap=f;floorMat.emissive.setHex(0x5a2408)}else{floorMat.emissiveMap=null;floorMat.emissive.setHex(0x0a1622)}floorMat.color.setHex(e==='frost'?0x9fb0c4:0xffffff);floorMat.needsUpdate=true;
    // ground outside the arena (visual only)
-   const ot=tex(e==='inferno'?'floor_lava.jpg':'floor_ice_outer.jpg',22);const outer=new t3.X(new t3.Ja(80,64),new t3.lo({map:ot,roughness:.9,color:e==='inferno'?0x8a6a5a:0xb8c8d8,emissive:e==='inferno'?0x2a0c02:0,emissiveMap:e==='inferno'?ot:null}));outer.rotation.x=-Math.PI/2;outer.position.y=-.06;outer.receiveShadow=true;P.add(outer);
+   const ot=tex(e==='inferno'?'floor_lava.jpg':'floor_ice_outer.jpg',22);const outer=new t3.X(new t3.Ja(80,64),new t3.lo({map:ot,roughness:.9,color:e==='inferno'?0x8a6a5a:0xb8c8d8,emissive:e==='inferno'?0x2a0c02:0,emissiveMap:e==='inferno'?ot:null}));outer.rotation.x=-Math.PI/2;outer.position.y=-.06;outer.receiveShadow=true;if(!(window.TVw&&TVw.on(e)))P.add(outer); /* v9.13: the overworld paints its own ground */
    // background buildings, well outside the play radius (20), no colliders
    /* v9.10.2 Soft: BLD flat billboards removed; Soft 3D backdrops cover these spots */
    
