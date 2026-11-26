@@ -1,4 +1,4 @@
-// Dark Logic Studios — The Void web v9.13.0: open overworld for Frostreach and Inferno.
+// Dark Logic Studios — The Void web v9.13.1: open overworld for Frostreach and Inferno.
 // The ring arena is gone for these two realms. Each realm is a walled valley (about 156 x 208 m) with paths,
 // a river with two bridges, a ridge with one pass, forests, cliffs and a sealed boss lair. The run order is
 // unchanged: Arena I, Arena II, the god essence crate (and the second crate), the God-Merge shrine, the realm
@@ -452,9 +452,10 @@
 #tvwObj{display:none;align-items:center;gap:6px;padding:3px 9px;border-radius:12px;background:rgba(5,5,8,.62);border:1px solid rgba(192,192,200,.35);color:#eee;font-size:12px;letter-spacing:1px;white-space:nowrap;text-shadow:0 1px 3px #000}
 #tvwObj b{display:inline-block;color:var(--tvwC,#9fe6ff);font-size:14px;line-height:1}
 body.tvw-on #vmHud{top:calc(var(--tvwH,220px) + 14px + env(safe-area-inset-top,0px))}
-body.touch #tvwMap{right:calc(66px + env(safe-area-inset-right,0px));--tvwW:96px}
+body.touch #tvwMap{right:calc(176px + env(safe-area-inset-right,0px));--tvwW:96px}
 body.touch #tvwObj{font-size:11px}
 body.touch.tvw-on #vmHud{top:calc(64px + env(safe-area-inset-top,0px))}
+body.touch.tc-portrait #tvwMap{top:calc(172px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px))}
 `;
     document.head.appendChild(css);
     const wrap = document.createElement('div'); wrap.id = 'tvwMap';
@@ -579,7 +580,7 @@ body.touch.tvw-on #vmHud{top:calc(64px + env(safe-area-inset-top,0px))}
   requestAnimationFrame(frame);
 
   window.TVw = {
-    version: '9.13.0',
+    version: '9.13.1',
     on: (e) => S.on && (e === undefined || e === S.realm),
     active: () => S.on && !(window.TV && window.TV.boss),
     build, collide, projOut, go, walk, toGate, toApproach,
