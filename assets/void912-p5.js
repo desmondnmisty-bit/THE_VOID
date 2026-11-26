@@ -64,12 +64,18 @@
   };
   // Reliquary emergence per god (Godot gift_def.gd emerge_* fields; full models from god_def.gd full_model_path).
   const EMERGE = {
-    ymir: { theme: 'Frost', prompt: 'Pry Open Frost Reliquary', model: 'ice_monster', height: 3.6, tint: [0.74, 0.79, 0.86], light: '#5fd0ff', trim: '#e0f0ff', dormant: [0.28, 0.42, 0.55] },
-    ullr: { theme: 'Frost', prompt: 'Pry Open Frost Reliquary', model: 'ice_queen', height: 3.4, tint: [0.70, 0.82, 0.90], light: '#4cbaff', trim: '#cfefff', dormant: [0.25, 0.40, 0.55] },
-    pele: { theme: 'Magma', prompt: 'Pry Open Magma Reliquary', model: 'fire_demon', height: 3.4, tint: [0.90, 0.38, 0.12], light: '#ff5a14', trim: '#ff6a2a', dormant: [0.55, 0.12, 0.0] },
-    sekhmet: { theme: 'Sun-Gold', prompt: 'Pry Open Sun-Gold Reliquary', model: 'lioness', height: 3.5, tint: [0.95, 0.75, 0.28], light: '#ffb347', trim: '#ffd27a', dormant: [0.45, 0.28, 0.08] },
+    ymir: { theme: 'Frost', prompt: 'Pry Open Frost Reliquary', model: 'ymir', height: 3.6, tint: [0.74, 0.79, 0.86], light: '#5fd0ff', trim: '#e0f0ff', dormant: [0.28, 0.42, 0.55] },
+    ullr: { theme: 'Frost', prompt: 'Pry Open Frost Reliquary', model: 'ullr', height: 3.4, tint: [0.70, 0.82, 0.90], light: '#4cbaff', trim: '#cfefff', dormant: [0.25, 0.40, 0.55] },
+    pele: { theme: 'Magma', prompt: 'Pry Open Magma Reliquary', model: 'pele', height: 3.4, tint: [0.90, 0.38, 0.12], light: '#ff5a14', trim: '#ff6a2a', dormant: [0.55, 0.12, 0.0] },
+    sekhmet: { theme: 'Sun-Gold', prompt: 'Pry Open Sun-Gold Reliquary', model: 'sekhmet', height: 3.5, tint: [0.95, 0.75, 0.28], light: '#ffb347', trim: '#ffd27a', dormant: [0.45, 0.28, 0.08] },
   };
   const RISE = { height: 3.2, duration: 1.1, flash: 0.25, shake: 0.24 };
+  const CLIPS = {
+    ymir: { idle: 'idle', walk: 'walk', hit: 'hit_react', signature: 'Throne_of_Rime' },
+    ullr: { idle: 'idle', walk: 'walk', hit: 'hit_react', signature: 'Heart_Crystal_Volley' },
+    pele: { idle: 'idle', walk: 'walk', hit: 'hit_react', signature: 'Lava_Vortex' },
+    sekhmet: { idle: 'idle', walk: 'walk', hit: 'hit_react', signature: 'Sun_Wrath_Feast' },
+  };
   // Name-only teasers for gods arriving in the full game (Misty, Nov 25: no images, no realm).
   const COMING = ['Ignis', 'Vaelen', 'Nyxara', 'Kaelor'];
 
@@ -508,6 +514,7 @@
     if (!gid || !h || !h.alive || (P.cd[gid] || 0) > 0) return false;
     const g = GODS[gid], m = g.m, pos = h.root.position.clone(), dir = aimDir(), T = f.T;
     P.cd[gid] = g.cd; P.casts++;
+    showCastGod(gid);
     f.burst.emit(pos.clone().setY(1), new T.Color(g.glow).getHex(), 60, 8, 0.7, 3);
     try { f.sfx.play('magic'); } catch (_) {}
     if (g.kind === 'nova') {
@@ -592,7 +599,32 @@
   }
 
   // ------------------------------------------------------------------ reliquary emergence
-  const E = { god: null, light: null, last: null };
+  const E = { god: null, light: null, last: null, rig: null, castRig: null };
+  function playRig(rig, name, once) {
+    if (rig && name && rig.has && rig.has(name)) return rig.play(name, { once: !!once });
+    return 0;
+  }
+  // TV3.model clones the GLB with an AnimationMixer (clips stay on the skinned root).
+  function spawnGod(key, height) {
+    if (!window.TV3 || !TV3.model) return null;
+    const rig = TV3.model(key, 1);
+    if (!rig || !rig.root) return null;
+    if (TV3.Box3 && TV3.W) {
+      const inner = rig.root.children[0] || rig.root;
+      let box = new TV3.Box3().setFromObject(rig.root);
+      const size = new TV3.W();
+      box.getSize(size);
+      const s = height / Math.max(size.y, 1e-3);
+      inner.scale.multiplyScalar(s);
+      box = new TV3.Box3().setFromObject(rig.root);
+      const c = new TV3.W();
+      box.getCenter(c);
+      inner.position.x -= c.x;
+      inner.position.y -= box.min.y;
+      inner.position.z -= c.z;
+    }
+    return rig;
+  }
   function tintModel(root, rgb, emissive, amount) {
     const f = FX();
     root.traverse((m) => {
@@ -613,8 +645,11 @@
       if (!em || !window.TV3 || !TV3.idol) { if (window.TVart) TVart.reveal(crate, realm, gid); return done(); }
       // lid pried: flash 0.25, shake 0.24, combat atmosphere on (Godot essence_crate.gd _play_emerge_fx)
       flash(RISE.flash); f.shake(RISE.shake); setCombat(true);
-      const keepH = TV3.idolH; TV3.idolH = em.height;
-      let god = null; try { god = TV3.idol(em.model); } finally { TV3.idolH = keepH; }
+      let rig = spawnGod(em.model, em.height), god = rig ? rig.root : null;
+      if (!god) {
+        const keepH = TV3.idolH; TV3.idolH = em.height;
+        try { god = TV3.idol(em.model); } finally { TV3.idolH = keepH; }
+      }
       if (!god) { if (window.TVart) TVart.reveal(crate, realm, gid); return done(); }
       const T = f.T, base = crate.root.position.clone();
       const from = base.clone().setY(-RISE.height), to = from.clone().setY(from.y + RISE.height);
@@ -625,7 +660,8 @@
       tintModel(god, em.dormant.map((v) => Math.min(1, v * 1.6)), new T.Color().setRGB(em.dormant[0], em.dormant[1], em.dormant[2], 'srgb'), 0.35);
       f.scene.add(god);
       const pl = new f.T.Color(em.light);
-      E.god = god; E.last = { gid, model: em.model, from: from.y, to: to.y, awakened: false };
+      E.god = god; E.rig = rig; E.last = { gid, model: em.model, from: from.y, to: to.y, awakened: false };
+      playRig(rig, (CLIPS[gid] || {}).idle);
       const t0 = performance.now();
       (function step() {
         const k = Math.min(1, (performance.now() - t0) / (RISE.duration * 1000)), q = k * k * (3 - 2 * k);
@@ -642,16 +678,43 @@
       })();
     });
   }
+  function showCastGod(gid) {
+    const em = EMERGE[gid], f = FX();
+    if (!em || !f || !f.hero()) return;
+    if (E.castRig && E.castRig.root) { try { f.scene.remove(E.castRig.root); } catch (_) {} E.castRig = null; }
+    const rig = spawnGod(em.model, em.height);
+    if (!rig) return;
+    const h = f.hero();
+    rig.root.position.copy(h.root.position);
+    rig.root.rotation.y = (h.facing != null) ? h.facing : h.root.rotation.y;
+    tintModel(rig.root, em.tint, new f.T.Color(em.light), 0.55);
+    f.scene.add(rig.root);
+    const dur = playRig(rig, (CLIPS[gid] || {}).signature, true) || 1.6;
+    E.castRig = rig;
+    const t0 = performance.now();
+    (function step() {
+      const k = Math.min(1, (performance.now() - t0) / (dur * 1000));
+      if (rig.mixer) rig.mixer.update(0.016);
+      if (k < 1) return requestAnimationFrame(step);
+      try { f.scene.remove(rig.root); } catch (_) {}
+      if (E.castRig === rig) E.castRig = null;
+    })();
+  }
   // After the gift card: the full god sinks back down (Godot: recedes into its totem).
   function recede() {
-    const g = E.god; if (!g) return; E.god = null;
+    const g = E.god, rig = E.rig; if (!g) return; E.god = null; E.rig = null;
     const f = FX(), y0 = g.position.y, t0 = performance.now();
-    (function step() { const k = Math.min(1, (performance.now() - t0) / 700); g.position.y = y0 - k * 4; g.scale.multiplyScalar(0.985); if (k < 1) requestAnimationFrame(step); else f.scene.remove(g); })();
+    (function step() {
+      const k = Math.min(1, (performance.now() - t0) / 700);
+      if (rig && rig.mixer) rig.mixer.update(0.016);
+      g.position.y = y0 - k * 4; g.scale.multiplyScalar(0.985);
+      if (k < 1) requestAnimationFrame(step); else f.scene.remove(g);
+    })();
   }
 
   // ------------------------------------------------------------------ public hooks used by the patched bundle
   const TVx = window.TVx = {
-    version: '9.12.0', items: ITEMS, emergeState: E, gods: GODS, coming: COMING, state: S, atmo: A, atmoCfg: ATMO, powers: P, marketVisits: 0,
+    version: '9.12.0', items: ITEMS, emergeState: E, gods: GODS, coming: COMING, clips: CLIPS, state: S, atmo: A, atmoCfg: ATMO, powers: P, marketVisits: 0,
     open: openShop, close: closeShop, isOpen: () => !!(shop && shop.classList.contains('show')), buy, press, applyShop, grant, cast, flash,
     // Enemy took a player hit (bundle Xe). Returns [damage, heavy]. Crits: base 0%, x1.5, + market bonuses.
     onHit(e, t, heavy) {
@@ -713,6 +776,8 @@
       if (!FX()) return;
       try { atmoTick(real, scaled); } catch (err) { console.warn('[TVx atmo]', err); }
       const f = FX();
+      if (E.rig && E.rig.mixer) E.rig.mixer.update(scaled);
+      if (E.castRig && E.castRig.mixer) E.castRig.mixer.update(scaled);
       if (!f.L.paused && f.L.state === 'play') powersTick(scaled);
       pollPad();
       const vis = hudVisible();
